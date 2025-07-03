@@ -21,7 +21,16 @@ function createTodo(todo) {
     const container = document.querySelector(".container");
 
     const item = document.createElement("div");
-    item.textContent = todo.title;
+    item.classList.add("item");
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    item.appendChild(checkbox);
+
+
+    const para = document.createElement("p");
+    para.textContent = todo.title;
+    item.appendChild(para);
 
     container.appendChild(item);
 }
