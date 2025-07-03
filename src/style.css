@@ -1,3 +1,12 @@
 body {
     background-color: hotpink;
 }
+
+.item {
+    display: flex;
+    gap: 10px;
+}
+
+input[type="checkbox"]:checked ~ p {
+    text-decoration: line-through;
+}
