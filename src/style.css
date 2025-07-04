@@ -52,6 +52,7 @@ h1 {
     border-radius: 50px; 
     color: var(--text-color);
     cursor: pointer;
+    outline: none;
 }
 
 .item {
