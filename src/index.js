@@ -27,6 +27,9 @@ function createTodo(todo) {
     checkbox.type = "checkbox";
     item.appendChild(checkbox);
 
+    checkbox.addEventListener("change", () => {
+        todo.toggleCompleted();
+    });
 
     const para = document.createElement("p");
     para.textContent = todo.title;
