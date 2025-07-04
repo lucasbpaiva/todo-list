@@ -9,6 +9,7 @@ class Todo {
         this.dueDate = dueDate;
         this.priority = priority;
         this.completed = false;
+        this.id = crypto.randomUUID();
         Todo.allTodos.push(this);
     }
 
@@ -34,6 +35,16 @@ function createTodo(todo) {
     const para = document.createElement("p");
     para.textContent = todo.title;
     item.appendChild(para);
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Delete";
+    deleteBtn.classList.add("delete-btn");
+    item.appendChild(deleteBtn);
+
+    deleteBtn.addEventListener("click", () => {
+        container.removeChild(item);
+        Todo.allTodos = Todo.allTodos.filter(item => item.id != todo.id);
+    });
 
     container.appendChild(item);
 }
@@ -72,3 +83,10 @@ confirmBtn.addEventListener("click", (event) => {
 cancelBtn.addEventListener("click", () => {
     form.reset();
 });
+
+dialog.addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        confirmBtn.click();
+    }
+})
