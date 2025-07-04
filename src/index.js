@@ -1,5 +1,4 @@
 import "./style.css";
-import deleteSVG from "./images/delete-icon.svg";
 
 class Todo {
     static allTodos = [];
@@ -27,6 +26,7 @@ function createTodo(todo) {
 
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
+    checkbox.classList.add("custom-checkbox");
     item.appendChild(checkbox);
 
     checkbox.addEventListener("change", () => {
@@ -35,11 +35,11 @@ function createTodo(todo) {
 
     const para = document.createElement("p");
     para.textContent = todo.title;
+    para.classList.add("todo-text");
     item.appendChild(para);
 
     const deleteBtn = document.createElement("button");
-    const deleteIcon = document.createElement("img");
-    deleteIcon.src = deleteSVG;
+    const deleteIcon = createDeleteIcon();
     deleteBtn.appendChild(deleteIcon);
     deleteBtn.classList.add("delete-btn");
     item.appendChild(deleteBtn);
@@ -52,10 +52,27 @@ function createTodo(todo) {
     container.appendChild(item);
 }
 
+function createDeleteIcon() {
+    const svgNS = "http://www.w3.org/2000/svg"
+    const deleteIcon = document.createElementNS(svgNS, "svg");
+    deleteIcon.setAttribute("height", "24px");
+    deleteIcon.setAttribute("width", "24px");
+    deleteIcon.setAttribute("viewBox", "0 -960 960 960");
+    deleteIcon.setAttribute("fill", "var(--secondary-color)");
+    const deletePath = document.createElementNS(svgNS, "path");
+    deletePath.setAttribute("d", "M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z");
+    deleteIcon.appendChild(deletePath);
+
+    return deleteIcon;
+}
+
 const item1 = new Todo("Go to the gym", "", new Date(), "High");
 createTodo(item1);
+const item2 = new Todo("Study for the test", "", new Date("2025-07-06"), "High");
+createTodo(item2);
 
 console.table(item1);
+console.table(item2);
 
 const form = document.querySelector(".todo-form");
 const dialog = document.querySelector("dialog");
