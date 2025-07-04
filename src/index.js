@@ -1,4 +1,5 @@
 import "./style.css";
+import deleteSVG from "./images/delete-icon.svg";
 
 class Todo {
     static allTodos = [];
@@ -37,7 +38,9 @@ function createTodo(todo) {
     item.appendChild(para);
 
     const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "Delete";
+    const deleteIcon = document.createElement("img");
+    deleteIcon.src = deleteSVG;
+    deleteBtn.appendChild(deleteIcon);
     deleteBtn.classList.add("delete-btn");
     item.appendChild(deleteBtn);
 
