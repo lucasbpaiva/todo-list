@@ -75,13 +75,20 @@ console.table(item1);
 console.table(item2);
 
 const form = document.querySelector(".todo-form");
-const dialog = document.querySelector("dialog");
+const modal = document.querySelector(".modal");
+const modalOverlay = document.querySelector(".modal-overlay");
 const addTodoBtn = document.querySelector(".addTodoBtn");
 const confirmBtn = document.querySelector(".confirmBtn");
 const cancelBtn = document.querySelector(".cancelBtn");
 
+function toggleModal() {
+    modal.classList.toggle("closed");
+    modalOverlay.classList.toggle("closed");
+}
+
 addTodoBtn.addEventListener("click", () => {
-    dialog.showModal();
+    modal.showModal();
+    toggleModal();
 });
 
 confirmBtn.addEventListener("click", (event) => {
@@ -96,15 +103,17 @@ confirmBtn.addEventListener("click", (event) => {
     createTodo(todo);
 
     form.reset(); //reset form input fields
-    dialog.close();
+    modal.close();
+    toggleModal();
 });
 
-// "Cancel" button already closes the dialog without submitting because of [formmethod="dialog"]
+// "Cancel" button already closes the modal without submitting because of [formmethod="modal"]
 cancelBtn.addEventListener("click", () => {
     form.reset();
+    toggleModal();
 });
 
-dialog.addEventListener("keypress", (event) => {
+modal.addEventListener("keypress", (event) => {
     if (event.key === "Enter") {
         event.preventDefault();
         confirmBtn.click();
