@@ -78,6 +78,7 @@ const form = document.querySelector(".todo-form");
 const modal = document.querySelector(".modal");
 const modalOverlay = document.querySelector(".modal-overlay");
 const addTodoBtn = document.querySelector(".addTodoBtn");
+const todoTitle = document.querySelector("#todo-title");
 const confirmBtn = document.querySelector(".confirmBtn");
 const cancelBtn = document.querySelector(".cancelBtn");
 
@@ -87,8 +88,8 @@ function toggleModal() {
 }
 
 addTodoBtn.addEventListener("click", () => {
-    modal.showModal();
     toggleModal();
+    todoTitle.focus();
 });
 
 confirmBtn.addEventListener("click", (event) => {
@@ -103,7 +104,6 @@ confirmBtn.addEventListener("click", (event) => {
     createTodo(todo);
 
     form.reset(); //reset form input fields
-    modal.close();
     toggleModal();
 });
 
