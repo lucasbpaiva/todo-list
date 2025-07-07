@@ -1,4 +1,5 @@
 import "./style.css";
+import { format } from "date-fns";
 
 class Todo {
     static allTodos = [];
@@ -33,10 +34,21 @@ function createTodo(todo) {
         todo.toggleCompleted();
     });
 
+    const todoText = document.createElement("div");
+    todoText.classList.add("todo-text");
+
     const para = document.createElement("p");
     para.textContent = todo.title;
-    para.classList.add("todo-text");
-    item.appendChild(para);
+    para.classList.add("todo-title");
+    todoText.appendChild(para);
+
+    const datePara = document.createElement("p");
+    const formattedDate = format(todo.dueDate, "dd/MM/yyyy");
+    datePara.textContent = formattedDate;
+    datePara.classList.add("date-text");
+    todoText.appendChild(datePara);
+
+    item.appendChild(todoText);
 
     const deleteBtn = document.createElement("button");
     const deleteIcon = createDeleteIcon();
@@ -66,9 +78,9 @@ function createDeleteIcon() {
     return deleteIcon;
 }
 
-const item1 = new Todo("Go to the gym", "", new Date(), "High");
+const item1 = new Todo("Go to the gym", "", new Date("2025-07-11"), "High");
 createTodo(item1);
-const item2 = new Todo("Study for the test", "", new Date("2025-07-06"), "High");
+const item2 = new Todo("Study for the test", "", new Date("2025-07-14"), "High");
 createTodo(item2);
 
 console.table(item1);
@@ -97,9 +109,9 @@ confirmBtn.addEventListener("click", (event) => {
 
     const title = document.querySelector("#todo-title").value;
     const notes = document.querySelector("#todo-notes").value;
-    const dueDate = document.querySelector("#due-date").value;
+    // Including a time component (yyyy-MM-dd 00:00:00), date-fns treats the string as local time, avoiding the UTC adjustment
+    const dueDate = document.querySelector("#due-date").value + " 00:00:00"; 
     const priority = document.querySelector("#priority").value;
-
     const todo = new Todo(title, notes, dueDate, priority);
     createTodo(todo);
 
