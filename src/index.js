@@ -113,9 +113,17 @@ cancelBtn.addEventListener("click", () => {
     toggleModal();
 });
 
-modal.addEventListener("keypress", (event) => {
+modal.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
         event.preventDefault();
         confirmBtn.click();
+    }
+})
+
+modal.addEventListener("keydown", (event) => {
+    // Using keydown as in some browsers the keypress event is only fired if the key outputs a character
+    if (event.key === "Escape") {
+        form.reset();
+        toggleModal();
     }
 })
