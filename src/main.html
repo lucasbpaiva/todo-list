@@ -13,19 +13,19 @@
 
     <dialog class="modal closed">
         <form class="todo-form">
-            <p>
+            <p class="form-item">
                 <label for="todo-title">Title: </label>
                 <input type="text" id="todo-title" name="todo-title">
             </p>
-            <p>
+            <p class="form-item">
                 <label for="todo-notes">Notes: </label>
                 <input type="text" id="todo-notes" name="todo-notes">
             </p>
-            <p>
+            <p class="form-item">
                 <label for="due-date"> Due Date: </label>
                 <input type="date" id="due-date" name="due-date">
             </p>
-            <p>
+            <p class="form-item">
                 <label for="priority"> Priority: </label>
                 <select name="priority" id="priority">
                     <option value="High">High</option>
@@ -34,8 +34,8 @@
                 </select>
             </p>
             <div class="modal-buttons">
-            <button value="cancel" class="cancelBtn" formmethod="dialog">Cancel</button>
-            <button class="confirmBtn" value="default">Confirm</button>
+                <button value="cancel" class="cancelBtn" formmethod="dialog">Cancel</button>
+                <button class="confirmBtn" value="default">Confirm</button>
             </div>
         </form>
     </dialog>
