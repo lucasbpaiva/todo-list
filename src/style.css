@@ -154,6 +154,28 @@ p input, p select {
     font-size: 0.8em;
 }
 
+.priority-btn {
+    padding: 3px;
+    background: none;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.priority-btn.High svg {
+    fill: var(--p1-color);
+}
+
+.priority-btn.Medium svg {
+    fill: var(--p2-color);
+}
+
+.priority-btn.Low svg {
+    fill: var(--p3-color);
+}
+
 .delete-btn {
     padding: 3px;
     background: none;
