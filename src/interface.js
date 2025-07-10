@@ -1,5 +1,9 @@
 import { format } from "date-fns";
 import { Todo } from "./index";
+import { Popover } from "bootstrap";
+
+//allow buttons in bootstrap popover
+Popover.Default.allowList.button = [];
 
 export function createTodo(todo) {
     const container = document.querySelector(".container");
@@ -40,6 +44,39 @@ export function createTodo(todo) {
     priorityBtn.classList.add("priority-btn");
     priorityBtn.classList.add(`${todo.priority}`);
     item.appendChild(priorityBtn);
+
+    const popover = new Popover(priorityBtn, {
+        content: '<div class="priority-popover"><button class="set-p1-btn">High</button><button class="set-p2-btn">Medium</button><button class="set-p3-btn">Low</button><button class="set-pNone-btn">None</button></div>', 
+        html: true, 
+        placement: "left",
+        template: '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-body"></div></div>',
+        trigger: 'click'
+    });
+
+    document.body.addEventListener("click", function(event) {
+        if (event.target.matches(".set-p1-btn")) {
+            console.log("set priority to High");
+            popover.hide();
+        }
+        if (event.target.matches(".set-p2-btn")) {
+            console.log("set priority to Medium");
+            popover.hide();
+        }
+        if (event.target.matches(".set-p3-btn")) {
+            console.log("set priority to Low");
+            popover.hide();
+        }
+        if (event.target.matches(".set-pNone-btn")) {
+            console.log("set priority to None");
+            popover.hide();
+        }
+
+        //Returns the first (starting at element) inclusive ancestor that matches selectors, and null otherwise.
+        const inPopover = event.target.closest(".popover");
+        if (!inPopover) {
+            popover.hide();
+        }
+    });
 
     const deleteBtn = document.createElement("button");
     const deleteIcon = createDeleteIcon();
