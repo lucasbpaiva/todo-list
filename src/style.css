@@ -176,6 +176,18 @@ p input, p select {
     fill: var(--p3-color);
 }
 
+.priority-popover {
+    background-color: var(--background);
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 5px;
+}
+
+.set-p1-btn {
+    background-color: var(--p1-color);
+}
+
 .delete-btn {
     padding: 3px;
     background: none;
