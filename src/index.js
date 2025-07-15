@@ -1,6 +1,6 @@
 import "./style.css";
 import { format } from "date-fns";
-import { createTodo } from "./interface";
+import { createTodo, displayList } from "./interface";
 
 export class Todo {
     static allTodos = [];
@@ -27,6 +27,8 @@ export class Todo {
         Todo.allTodos = Todo.allTodos.filter(item => item.id != todo.id);
     }
 }
+
+displayList("All Todos");
 
 const item1 = new Todo("Brush teeth", "something something", " 00:00:00", "High");
 createTodo(item1);
