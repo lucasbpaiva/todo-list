@@ -28,9 +28,9 @@ export class Todo {
     }
 }
 
-const item1 = new Todo("Brush teeth", "", " 00:00:00", "High");
+const item1 = new Todo("Brush teeth", "something something", " 00:00:00", "High");
 createTodo(item1);
-const item2 = new Todo("Study for the test", "", new Date("2025-08-05 00:00:00"), "Medium");
+const item2 = new Todo("Study for the test", "something something", new Date("2025-08-05 00:00:00"), "Medium");
 createTodo(item2);
 const item3 = new Todo("Organize surprise party", "", new Date("2025-08-20 00:00:00"), "Low");
 createTodo(item3);
