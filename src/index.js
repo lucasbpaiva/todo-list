@@ -19,6 +19,10 @@ export class Todo {
         this.completed = !this.completed;
     }
 
+    setPriority(priority) {
+        this.priority = priority;
+    }
+
     static removeTodo(todo) {
         Todo.allTodos = Todo.allTodos.filter(item => item.id != todo.id);
     }
