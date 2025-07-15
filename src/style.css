@@ -182,10 +182,41 @@ p input, p select {
     flex-direction: column;
     padding: 10px;
     gap: 5px;
+    border: 2px solid var(--secondary-color);
+    border-radius: 15px;
+}
+
+.popover .arrow {
+    position: absolute;
+    display: block;
+    top: 50%;
+    left: 100%;;
+    content: "";
+    margin-top: -5px;
+    border-width: 5px;
+    border-color: transparent transparent transparent var(--secondary-color);
+    border-style: solid;
+}
+
+.set-priority-btn {
+    padding: 2px 10px;
+    border-radius: 5px;
 }
 
 .set-p1-btn {
     background-color: var(--p1-color);
+}
+
+.set-p2-btn {
+    background-color: var(--p2-color);
+}
+
+.set-p3-btn {
+    background-color: var(--p3-color);
+}
+
+.set-pNone-btn {
+    background-color: var(--secondary-color);
 }
 
 .delete-btn {
