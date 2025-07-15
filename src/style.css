@@ -33,12 +33,24 @@ html {
 }
 
 body {
+    display: flex;
+}
+
+.sidebar {
+    background-color: var(--primary-color);
+    width: 200px;
+    max-width: 300px;
+    padding: 10px 20px;
+}
+
+.main-content {
     min-height: 100vh;
     padding: 10px;
     background-color: var(--background);
     display: flex;
     flex-direction: column;
     align-items: center;
+    flex-grow: 1;
 }
 
 h1 {
@@ -120,6 +132,7 @@ p input, p select, p textarea {
     outline-color: var(--accent-color);
     padding: 5px;
     caret-color: var(--accent-color);
+    font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
 }
 
 /* div containing the buttons */
