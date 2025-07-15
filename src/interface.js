@@ -5,6 +5,27 @@ import { Popover } from "bootstrap";
 //allow buttons in bootstrap popover
 Popover.Default.allowList.button = [];
 
+export function displayList(listName) {
+    const mainContent = document.querySelector(".main-content");
+
+    const listHeader = document.createElement("h1");
+    listHeader.textContent = listName;
+
+    const addTodoBtn = document.createElement("button");
+    addTodoBtn.textContent = "+ Add Todo";
+    addTodoBtn.classList.add("addTodoBtn");
+
+    addTodoBtn.addEventListener("click", () => {
+        toggleModal();
+        todoTitle.focus();
+    });
+
+    const container = document.createElement("div");
+    container.classList.add("container");
+
+    mainContent.append(listHeader, addTodoBtn, container);
+}
+
 export function createTodo(todo) {
     const container = document.querySelector(".container");
 
@@ -152,7 +173,7 @@ function createPriorityIcon() {
 const form = document.querySelector(".todo-form");
 const modal = document.querySelector(".modal");
 const modalOverlay = document.querySelector(".modal-overlay");
-const addTodoBtn = document.querySelector(".addTodoBtn");
+
 const todoTitle = document.querySelector("#todo-title");
 const confirmBtn = document.querySelector(".confirmBtn");
 const cancelBtn = document.querySelector(".cancelBtn");
@@ -161,11 +182,6 @@ function toggleModal() {
     modal.classList.toggle("closed");
     modalOverlay.classList.toggle("closed");
 }
-
-addTodoBtn.addEventListener("click", () => {
-    toggleModal();
-    todoTitle.focus();
-});
 
 confirmBtn.addEventListener("click", (event) => {
     event.preventDefault(); //  Prevent the "confirm" button from the default behavior of submitting the form
