@@ -28,6 +28,12 @@ export function createTodo(todo) {
     para.classList.add("todo-title");
     todoText.appendChild(para);
 
+    const notesPara = document.createElement("p");
+    console.log(todo.notes);
+    notesPara.textContent = todo.notes;
+    notesPara.classList.add("notes-text");
+    todoText.appendChild(notesPara);
+
     if (todo.dueDate != " 00:00:00") {
         const datePara = document.createElement("p");
         const formattedDate = format(todo.dueDate, "dd/MM/yyyy");
@@ -58,28 +64,24 @@ export function createTodo(todo) {
     item.addEventListener("click", function(event) {
         if (event.target.matches(".set-p1-btn")) {
             todo.setPriority("High");
-            console.log(todo.priority);
             priorityBtn.classList.remove("Medium", "Low", "None");
             priorityBtn.classList.add("High");
             popover.hide();
         }
         if (event.target.matches(".set-p2-btn")) {
             todo.setPriority("Medium");
-            console.log(todo.priority);
             priorityBtn.classList.remove("High", "Low", "None");
             priorityBtn.classList.add("Medium");
             popover.hide();
         }
         if (event.target.matches(".set-p3-btn")) {
             todo.setPriority("Low");
-            console.log(todo.priority);
             priorityBtn.classList.remove("High", "Medium", "None");
             priorityBtn.classList.add("Low");
             popover.hide();
         }
         if (event.target.matches(".set-pNone-btn")) {
             todo.setPriority("None");
-            console.log(todo.priority);
             priorityBtn.classList.remove("High", "Medium", "Low");
             priorityBtn.classList.add("None");
             popover.hide();
@@ -187,7 +189,7 @@ cancelBtn.addEventListener("click", () => {
 });
 
 modal.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && document.activeElement !== document.querySelector("#todo-notes")) {
         event.preventDefault();
         confirmBtn.click();
     }
