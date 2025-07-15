@@ -46,31 +46,47 @@ export function createTodo(todo) {
     item.appendChild(priorityBtn);
 
     const popover = new Popover(priorityBtn, {
-        content: '<div class="priority-popover"><button class="set-p1-btn">High</button><button class="set-p2-btn">Medium</button><button class="set-p3-btn">Low</button><button class="set-pNone-btn">None</button></div>', 
+        container: item,
+        content: '<div class="priority-popover"><button class="set-p1-btn set-priority-btn">High</button><button class="set-p2-btn set-priority-btn">Medium</button><button class="set-p3-btn set-priority-btn">Low</button><button class="set-pNone-btn set-priority-btn">None</button></div>', 
         html: true, 
         placement: "left",
         template: '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-body"></div></div>',
         trigger: 'click'
     });
 
-    document.body.addEventListener("click", function(event) {
+    //because the popover is dinamically created when the flag is clicked we need to set the event listener in the item div which was specified as the container in the popover creation 
+    item.addEventListener("click", function(event) {
         if (event.target.matches(".set-p1-btn")) {
-            console.log("set priority to High");
+            todo.setPriority("High");
+            console.log(todo.priority);
+            priorityBtn.classList.remove("Medium", "Low", "None");
+            priorityBtn.classList.add("High");
             popover.hide();
         }
         if (event.target.matches(".set-p2-btn")) {
-            console.log("set priority to Medium");
+            todo.setPriority("Medium");
+            console.log(todo.priority);
+            priorityBtn.classList.remove("High", "Low", "None");
+            priorityBtn.classList.add("Medium");
             popover.hide();
         }
         if (event.target.matches(".set-p3-btn")) {
-            console.log("set priority to Low");
+            todo.setPriority("Low");
+            console.log(todo.priority);
+            priorityBtn.classList.remove("High", "Medium", "None");
+            priorityBtn.classList.add("Low");
             popover.hide();
         }
         if (event.target.matches(".set-pNone-btn")) {
-            console.log("set priority to None");
+            todo.setPriority("None");
+            console.log(todo.priority);
+            priorityBtn.classList.remove("High", "Medium", "Low");
+            priorityBtn.classList.add("None");
             popover.hide();
         }
+    });
 
+    document.body.addEventListener("click", (event) => {
         //Returns the first (starting at element) inclusive ancestor that matches selectors, and null otherwise.
         const inPopover = event.target.closest(".popover");
         if (!inPopover) {
