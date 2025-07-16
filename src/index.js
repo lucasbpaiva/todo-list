@@ -2,15 +2,34 @@ import "./style.css";
 import { format } from "date-fns";
 import { createTodo, displayList } from "./interface";
 
+export class List {
+    static allLists = [];
+
+    constructor(listName, arrayOfTodos) {
+        this.listName = listName;
+        this.arrayOfTodos = arrayOfTodos;
+        this.id = crypto.randomUUID();
+        List.allLists.push(this);
+    }
+
+    static removeTodo(todo, list = allTodos) {
+        list.arrayOfTodos = list.arrayOfTodos.filter(item => item.id != todo.id); //remove from list
+        allTodos.arrayOfTodos = allTodos.arrayOfTodos.filter(item => item.id != todo.id); //remove from list of all todos
+        console.table(list.arrayOfTodos);
+        console.table(allTodos.arrayOfTodos);
+    }
+}
+
 export class Todo {
     static allTodos = [];
 
-    constructor(title, notes, dueDate, priority) {
+    constructor(title, notes, dueDate, priority, list = allTodos) {
         this.title = title;
         this.notes = notes;
         this.dueDate = dueDate;
         this.priority = priority;
         this.completed = false;
+        this.list = list;
         this.id = crypto.randomUUID();
         Todo.allTodos.push(this);
     }
@@ -23,20 +42,34 @@ export class Todo {
         this.priority = priority;
     }
 
-    static removeTodo(todo) {
-        Todo.allTodos = Todo.allTodos.filter(item => item.id != todo.id);
-    }
+    // static removeTodo(todo) {
+    //     Todo.allTodos = Todo.allTodos.filter(item => item.id != todo.id);
+    // }
 }
 
-displayList("All Todos");
+const firstListItems = [];
 
-const item1 = new Todo("Brush teeth", "something something", " 00:00:00", "High");
-createTodo(item1);
-const item2 = new Todo("Study for the test", "something something", new Date("2025-08-05 00:00:00"), "Medium");
-createTodo(item2);
-const item3 = new Todo("Organize surprise party", "", new Date("2025-08-20 00:00:00"), "Low");
-createTodo(item3);
+export const firstList = new List("First List", firstListItems);
 
-console.table(item1);
-console.table(item2);
-console.table(item3);
+firstListItems.push(
+    new Todo("Brush teeth", "something something", " 00:00:00", "High", firstList),
+    new Todo("Study for the test", "something something", new Date("2025-08-05 00:00:00"), "Medium", firstList),
+    new Todo("Organize surprise party", "", new Date("2025-08-20 00:00:00"), "Low", firstList)
+);
+
+export const allTodos = new List("All Todos", Todo.allTodos);
+
+const secondListItems = [];
+
+export const secondList = new List("My Other List", secondListItems);
+
+secondListItems.push(
+    new Todo("Buy Manga", "Chainsaw Man and Spy X Family", " 00:00:00", "Low", secondList),
+    new Todo("Go to the gym", "get some more reps", new Date("2025-07-17 00:00:00"), "Medium", secondList),
+    new Todo("Actually read the mangas", "someday", " 00:00:00", "High", secondList)
+);
+
+displayList(allTodos);
+
+// const list = Todo.allTodos;
+// console.table(list);
