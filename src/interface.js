@@ -1,15 +1,22 @@
 import { format } from "date-fns";
-import { Todo } from "./index";
+import { Todo, List, firstList, secondList, allTodos } from "./index";
 import { Popover } from "bootstrap";
 
 //allow buttons in bootstrap popover
 Popover.Default.allowList.button = [];
 
-export function displayList(listName) {
+function clearDivContents(div) {
+    while (div.firstChild) {
+        div.removeChild(div.firstChild);
+    }
+}
+
+export function displayList(todoList) {
     const mainContent = document.querySelector(".main-content");
+    clearDivContents(mainContent);
 
     const listHeader = document.createElement("h1");
-    listHeader.textContent = listName;
+    listHeader.textContent = todoList.listName;
 
     const addTodoBtn = document.createElement("button");
     addTodoBtn.textContent = "+ Add Todo";
@@ -22,8 +29,11 @@ export function displayList(listName) {
 
     const container = document.createElement("div");
     container.classList.add("container");
+    container.dataset.listId = todoList.id;
 
     mainContent.append(listHeader, addTodoBtn, container);
+
+    todoList.arrayOfTodos.forEach(createTodo);
 }
 
 export function createTodo(todo) {
@@ -50,7 +60,6 @@ export function createTodo(todo) {
     todoText.appendChild(para);
 
     const notesPara = document.createElement("p");
-    console.log(todo.notes);
     notesPara.textContent = todo.notes;
     notesPara.classList.add("notes-text");
     todoText.appendChild(notesPara);
@@ -125,7 +134,7 @@ export function createTodo(todo) {
 
     deleteBtn.addEventListener("click", () => {
         container.removeChild(item);
-        Todo.removeTodo(todo);
+        List.removeTodo(todo, todo.list);
     });
 
     container.appendChild(item);
@@ -191,7 +200,9 @@ confirmBtn.addEventListener("click", (event) => {
     // Including a time component (yyyy-MM-dd 00:00:00), date-fns treats the string as local time, avoiding the UTC adjustment
     const dueDate = `${document.querySelector("#due-date").value} 00:00:00`;
     const priority = document.querySelector("#priority").value;
-    const todo = new Todo(title, notes, dueDate, priority);
+    const listId = document.querySelector(".container").dataset.listId;
+    const list = List.allLists.find(list => list.id == listId);
+    const todo = new Todo(title, notes, dueDate, priority, list);
     createTodo(todo);
 
     form.reset(); //reset form input fields
@@ -218,3 +229,22 @@ modal.addEventListener("keydown", (event) => {
         toggleModal();
     }
 })
+
+const allTodosLink = document.querySelector(".all-todos");
+const firstListLink = document.querySelector(".first-list");
+const secondListLink = document.querySelector(".second-list");
+
+allTodosLink.addEventListener("click", (event) => {
+    event.preventDefault();
+    displayList(allTodos);
+});
+
+firstListLink.addEventListener("click", (event) => {
+    event.preventDefault();
+    displayList(firstList);
+});
+
+secondListLink.addEventListener("click", (event) => {
+    event.preventDefault();
+    displayList(secondList);
+});
