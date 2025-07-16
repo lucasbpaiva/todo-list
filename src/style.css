@@ -41,6 +41,8 @@ body {
     width: 200px;
     max-width: 300px;
     padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .main-content {
@@ -54,7 +56,7 @@ body {
 }
 
 h1 {
-    margin-top: 100px;
+    margin-top: 50px;
     margin-bottom: 20px;
     font-size: 3rem;
     text-align: center;
@@ -133,6 +135,7 @@ p input, p select, p textarea {
     padding: 5px;
     caret-color: var(--accent-color);
     font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+    resize: none;
 }
 
 /* div containing the buttons */
