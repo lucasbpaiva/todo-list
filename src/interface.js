@@ -33,10 +33,10 @@ export function displayList(todoList) {
 
     mainContent.append(listHeader, addTodoBtn, container);
 
-    todoList.arrayOfTodos.forEach(createTodo);
+    todoList.arrayOfTodos.forEach(displayTodo);
 }
 
-export function createTodo(todo) {
+export function displayTodo(todo) {
     const container = document.querySelector(".container");
 
     const item = document.createElement("div");
@@ -140,6 +140,18 @@ export function createTodo(todo) {
     container.appendChild(item);
 }
 
+export function switchLists() {
+    const listLinks = document.querySelectorAll("a");
+    listLinks.forEach(listLink => {
+        listLink.addEventListener("click", (event) => {
+            event.preventDefault();
+            const listId = listLink.dataset.listId;
+            const list = List.allLists.find(list => list.id == listId);
+            displayList(list);
+        });
+    });
+}
+
 function createDeleteIcon() {
     const svgNS = "http://www.w3.org/2000/svg"
     const deleteIcon = document.createElementNS(svgNS, "svg");
@@ -192,9 +204,7 @@ function toggleModal() {
     modalOverlay.classList.toggle("closed");
 }
 
-confirmBtn.addEventListener("click", (event) => {
-    event.preventDefault(); //  Prevent the "confirm" button from the default behavior of submitting the form
-
+function createTodo() {
     const title = document.querySelector("#todo-title").value;
     const notes = document.querySelector("#todo-notes").value;
     // Including a time component (yyyy-MM-dd 00:00:00), date-fns treats the string as local time, avoiding the UTC adjustment
@@ -202,9 +212,16 @@ confirmBtn.addEventListener("click", (event) => {
     const priority = document.querySelector("#priority").value;
     const listId = document.querySelector(".container").dataset.listId;
     const list = List.allLists.find(list => list.id == listId);
-    const todo = new Todo(title, notes, dueDate, priority, list);
-    createTodo(todo);
+    const todo = new Todo(title, notes, dueDate, priority, list); //create todo object
+    list.addTodo(todo); //add todo to the list object
 
+    return todo;
+}
+
+confirmBtn.addEventListener("click", (event) => {
+    event.preventDefault(); //  Prevent the "confirm" button from the default behavior of submitting the form
+    const todo = createTodo();
+    displayTodo(todo);
     form.reset(); //reset form input fields
     toggleModal();
 });
@@ -229,22 +246,3 @@ modal.addEventListener("keydown", (event) => {
         toggleModal();
     }
 })
-
-const allTodosLink = document.querySelector(".all-todos");
-const firstListLink = document.querySelector(".first-list");
-const secondListLink = document.querySelector(".second-list");
-
-allTodosLink.addEventListener("click", (event) => {
-    event.preventDefault();
-    displayList(allTodos);
-});
-
-firstListLink.addEventListener("click", (event) => {
-    event.preventDefault();
-    displayList(firstList);
-});
-
-secondListLink.addEventListener("click", (event) => {
-    event.preventDefault();
-    displayList(secondList);
-});
