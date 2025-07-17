@@ -23,8 +23,8 @@ export function displayList(todoList) {
     addTodoBtn.classList.add("addTodoBtn");
 
     addTodoBtn.addEventListener("click", () => {
-        toggleModal();
-        todoTitle.focus();
+        toggleModal(todoModal);
+        document.querySelector("#todo-title").focus();
     });
 
     const container = document.createElement("div");
@@ -140,6 +140,20 @@ export function displayTodo(todo) {
     container.appendChild(item);
 }
 
+function createTodo() {
+    const title = document.querySelector("#todo-title").value;
+    const notes = document.querySelector("#todo-notes").value;
+    // Including a time component (yyyy-MM-dd 00:00:00), date-fns treats the string as local time, avoiding the UTC adjustment
+    const dueDate = `${document.querySelector("#due-date").value} 00:00:00`;
+    const priority = document.querySelector("#priority").value;
+    const listId = document.querySelector(".container").dataset.listId;
+    const list = List.allLists.find(list => list.id == listId);
+    const todo = new Todo(title, notes, dueDate, priority, list); //create todo object
+    list.addTodo(todo); //add todo to the list object
+
+    return todo;
+}
+
 export function switchLists() {
     const listLinks = document.querySelectorAll("a");
     listLinks.forEach(listLink => {
@@ -191,58 +205,87 @@ function createPriorityIcon() {
     return priorityIcon;
 }
 
-const form = document.querySelector(".todo-form");
-const modal = document.querySelector(".modal");
+const todoForm = document.querySelector(".todo-form");
+const todoModal = document.querySelector(".modal");
 const modalOverlay = document.querySelector(".modal-overlay");
-
-const todoTitle = document.querySelector("#todo-title");
 const confirmBtn = document.querySelector(".confirmBtn");
 const cancelBtn = document.querySelector(".cancelBtn");
 
-function toggleModal() {
+function toggleModal(modal) {
     modal.classList.toggle("closed");
     modalOverlay.classList.toggle("closed");
-}
-
-function createTodo() {
-    const title = document.querySelector("#todo-title").value;
-    const notes = document.querySelector("#todo-notes").value;
-    // Including a time component (yyyy-MM-dd 00:00:00), date-fns treats the string as local time, avoiding the UTC adjustment
-    const dueDate = `${document.querySelector("#due-date").value} 00:00:00`;
-    const priority = document.querySelector("#priority").value;
-    const listId = document.querySelector(".container").dataset.listId;
-    const list = List.allLists.find(list => list.id == listId);
-    const todo = new Todo(title, notes, dueDate, priority, list); //create todo object
-    list.addTodo(todo); //add todo to the list object
-
-    return todo;
 }
 
 confirmBtn.addEventListener("click", (event) => {
     event.preventDefault(); //  Prevent the "confirm" button from the default behavior of submitting the form
     const todo = createTodo();
     displayTodo(todo);
-    form.reset(); //reset form input fields
-    toggleModal();
+    todoForm.reset(); //reset form input fields
+    toggleModal(todoModal);
 });
 
 // "Cancel" button already closes the modal without submitting because of [formmethod="modal"]
 cancelBtn.addEventListener("click", () => {
-    form.reset();
-    toggleModal();
+    todoForm.reset();
+    toggleModal(todoModal);
 });
 
-modal.addEventListener("keydown", (event) => {
+todoModal.addEventListener("keydown", (event) => {
     if (event.key === "Enter" && document.activeElement !== document.querySelector("#todo-notes")) {
         event.preventDefault();
         confirmBtn.click();
     }
-})
+});
 
-modal.addEventListener("keydown", (event) => {
+todoModal.addEventListener("keydown", (event) => {
     // Using keydown as in some browsers the keypress event is only fired if the key outputs a character
     if (event.key === "Escape") {
-        form.reset();
-        toggleModal();
+        todoForm.reset();
+        toggleModal(todoModal);
     }
-})
+});
+
+const listModal = document.querySelector(".list-modal");
+const listForm = document.querySelector(".list-form");
+const listConfirmBtn = document.querySelector(".list-confirm-btn");
+const listCancelBtn = document.querySelector(".list-cancel-btn");
+const addListBtn = document.querySelector(".add-list-btn");
+
+addListBtn.addEventListener("click", () => {
+    toggleModal(listModal);
+    document.querySelector("#list-name").focus();
+});
+
+listConfirmBtn.addEventListener("click", (event) => {
+    event.preventDefault(); //  Prevent the "confirm" button from the default behavior of submitting the form
+    const listName = document.querySelector("#list-name").value;
+    if (listName !== "") {
+        alert(`list with name "${listName}" created`);//logic to create new list and link to access it
+        listForm.reset(); //reset form input fields
+        toggleModal(listModal);
+    } else {
+        alert("List not created. You must enter a name for the list!");
+        document.querySelector("#list-name").focus();
+    }
+});
+
+// "Cancel" button already closes the modal without submitting because of [formmethod="modal"]
+listCancelBtn.addEventListener("click", () => {
+    listForm.reset();
+    toggleModal(listModal);
+});
+
+listModal.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        listConfirmBtn.click();
+    }
+});
+
+listModal.addEventListener("keydown", (event) => {
+    // Using keydown as in some browsers the keypress event is only fired if the key outputs a character
+    if (event.key === "Escape") {
+        listForm.reset();
+        toggleModal(listModal);
+    }
+});
