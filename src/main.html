@@ -7,9 +7,12 @@
 </head>
 <body>
     <div class="sidebar">
-        <a href="" class="all-todos list-link">All Todos</a>
-        <a href="" class="first-list list-link">First List</a>
-        <a href="" class="second-list list-link">Second List</a>
+        <div class="links">
+            <a href="" class="all-todos list-link">All Todos</a>
+            <a href="" class="first-list list-link">First List</a>
+            <a href="" class="second-list list-link">Second List</a>
+        </div>
+        <button class="add-list-btn">+ Add List</button>
     </div>
     <div class="main-content">
     </div>
@@ -38,8 +41,18 @@
                 </select>
             </p>
             <div class="modal-buttons">
-                <button value="cancel" class="cancelBtn" formmethod="dialog">Cancel</button>
-                <button class="confirmBtn" value="default">Confirm</button>
+                <button class="cancelBtn" formmethod="dialog">Cancel</button>
+                <button class="confirmBtn">Confirm</button>
+            </div>
+        </form>
+    </dialog>
+    <dialog class="list-modal closed">
+        <form class="list-form">
+            <label for="list-name">Name: </label>
+            <input type="text" name="list-name" id="list-name">
+            <div class="list-modal-buttons">
+                <button class="list-cancel-btn" formmethod="dialog">Cancel</button>
+                <button class="list-confirm-btn">Confirm</button>
             </div>
         </form>
     </dialog>
