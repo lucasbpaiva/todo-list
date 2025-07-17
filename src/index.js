@@ -16,13 +16,11 @@ export class List {
     static removeTodo(todo, list = allTodos) {
         list.arrayOfTodos = list.arrayOfTodos.filter(item => item.id != todo.id); //remove from list
         allTodos.arrayOfTodos = allTodos.arrayOfTodos.filter(item => item.id != todo.id); //remove from list of all todos
-        console.table(list.arrayOfTodos);
-        console.table(allTodos.arrayOfTodos);
     }
 
     addTodo(todo) {
         this.arrayOfTodos.push(todo);
-        allTodos.arrayOfTodos.push(todo);
+        if (this != allTodos) allTodos.arrayOfTodos.push(todo);
     }
 }
 
