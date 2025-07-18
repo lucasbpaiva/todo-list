@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { Todo, List, firstList, secondList, allTodos } from "./index";
+import { Todo, List} from "./index";
 import { Popover } from "bootstrap";
 
 //allow buttons in bootstrap popover
@@ -20,7 +20,7 @@ export function displayList(todoList) {
 
     const addTodoBtn = document.createElement("button");
     addTodoBtn.textContent = "+ Add Todo";
-    addTodoBtn.classList.add("addTodoBtn");
+    addTodoBtn.classList.add("add-todo-btn");
 
     addTodoBtn.addEventListener("click", () => {
         toggleModal(todoModal);
@@ -154,16 +154,22 @@ function createTodo() {
     return todo;
 }
 
-export function switchLists() {
-    const listLinks = document.querySelectorAll("a");
-    listLinks.forEach(listLink => {
-        listLink.addEventListener("click", (event) => {
-            event.preventDefault();
-            const listId = listLink.dataset.listId;
-            const list = List.allLists.find(list => list.id == listId);
-            displayList(list);
-        });
+export function createListLink(list) {
+    const listLink = document.createElement("a");
+    listLink.href = "";
+    listLink.classList.add("list-link");
+    listLink.textContent = list.listName;
+    listLink.dataset.listId = list.id;
+
+    listLink.addEventListener("click", (event) => {
+        event.preventDefault();
+        const listId = listLink.dataset.listId;
+        const list = List.allLists.find(list => list.id == listId);
+        displayList(list);
     });
+
+    const links = document.querySelector(".links");
+    links.appendChild(listLink);
 }
 
 function createDeleteIcon() {
@@ -266,7 +272,9 @@ listConfirmBtn.addEventListener("click", (event) => {
     event.preventDefault(); //  Prevent the "confirm" button from the default behavior of submitting the form
     const listNameInput = document.querySelector("#list-name");
     if (listNameInput.value !== "") {
-        alert(`list with name "${listNameInput.value}" created`);//logic to create new list and link to access it
+        const list = new List(listNameInput.value);
+        createListLink(list);
+        displayList(list);
         listForm.reset(); //reset form input fields
         toggleModal(listModal);
     } else {
