@@ -73,6 +73,7 @@ export function displayTodo(todo) {
     }
 
     item.appendChild(todoText);
+    if (todo.completed === true) todoText.classList.add("completed");
 
     const priorityBtn = document.createElement("button");
     const priorityIcon = createPriorityIcon();
