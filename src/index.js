@@ -1,6 +1,6 @@
 import "./style.css";
 import { format } from "date-fns";
-import { displayTodo, displayList, switchLists} from "./interface";
+import { displayList, createListLink} from "./interface";
 
 export class List {
     static allLists = [];
@@ -50,13 +50,11 @@ export class Todo {
     // }
 }
 
-export const allTodos = new List("All Todos");
-const allTodosLink = document.querySelector(".all-todos");
-allTodosLink.dataset.listId = allTodos.id;
+const allTodos = new List("All Todos");
+createListLink(allTodos);
 
-export const firstList = new List("First List");
-const firstListLink = document.querySelector(".first-list");
-firstListLink.dataset.listId = firstList.id;
+const firstList = new List("First List");
+createListLink(firstList);
 
 const firstListItems = [
     new Todo("Brush teeth", "something something", " 00:00:00", "High", firstList),
@@ -66,9 +64,8 @@ const firstListItems = [
 
 firstListItems.forEach(item => firstList.addTodo(item));
 
-export const secondList = new List("My Other List");
-const secondListLink = document.querySelector(".second-list");
-secondListLink.dataset.listId = secondList.id;
+const secondList = new List("My Other List");
+createListLink(secondList);
 
 const secondListItems = [
     new Todo("Buy Manga", "Chainsaw Man and Spy X Family", " 00:00:00", "Low", secondList),
@@ -79,5 +76,3 @@ const secondListItems = [
 secondListItems.forEach(item => secondList.addTodo(item));
 
 displayList(allTodos);
-
-switchLists();
