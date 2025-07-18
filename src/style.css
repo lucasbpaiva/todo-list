@@ -49,6 +49,22 @@ body {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    gap: 5px;
+}
+
+.list-selector {
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.list-selector a {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.list-selector.list-selected {
+    background-color: var(--accent-color);
+    color: var(--background);
 }
 
 .add-list-btn {
