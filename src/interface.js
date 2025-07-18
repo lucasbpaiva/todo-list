@@ -218,10 +218,16 @@ function toggleModal(modal) {
 
 confirmBtn.addEventListener("click", (event) => {
     event.preventDefault(); //  Prevent the "confirm" button from the default behavior of submitting the form
-    const todo = createTodo();
-    displayTodo(todo);
-    todoForm.reset(); //reset form input fields
-    toggleModal(todoModal);
+    const todoTitleInput = document.querySelector("#todo-title");
+    if (todoTitleInput.value !== "") {
+        const todo = createTodo();
+        displayTodo(todo);
+        todoForm.reset(); //reset form input fields
+        toggleModal(todoModal);
+    } else {
+        alert("Todo not created. You must enter a title for your todo!");
+        todoTitleInput.focus();
+    }
 });
 
 // "Cancel" button already closes the modal without submitting because of [formmethod="modal"]
@@ -258,14 +264,14 @@ addListBtn.addEventListener("click", () => {
 
 listConfirmBtn.addEventListener("click", (event) => {
     event.preventDefault(); //  Prevent the "confirm" button from the default behavior of submitting the form
-    const listName = document.querySelector("#list-name").value;
-    if (listName !== "") {
-        alert(`list with name "${listName}" created`);//logic to create new list and link to access it
+    const listNameInput = document.querySelector("#list-name");
+    if (listNameInput.value !== "") {
+        alert(`list with name "${listNameInput.value}" created`);//logic to create new list and link to access it
         listForm.reset(); //reset form input fields
         toggleModal(listModal);
     } else {
         alert("List not created. You must enter a name for the list!");
-        document.querySelector("#list-name").focus();
+        listNameInput.focus();
     }
 });
 
