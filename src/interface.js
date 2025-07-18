@@ -73,7 +73,7 @@ export function displayTodo(todo) {
     }
 
     item.appendChild(todoText);
-    if (todo.completed === true) todoText.classList.add("completed");
+    if (todo.completed === true) checkbox.checked = true;
 
     const priorityBtn = document.createElement("button");
     const priorityIcon = createPriorityIcon();
