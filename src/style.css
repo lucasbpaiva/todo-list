@@ -80,7 +80,7 @@ h1 {
     gap: 10px;
 }
 
-.addTodoBtn {
+.add-todo-btn {
     padding: 10px 20px;
     width: min(400px, 100%);
     margin-bottom: 20px;
@@ -90,6 +90,15 @@ h1 {
     color: var(--text-color);
     cursor: pointer;
     outline: none;
+}
+
+.add-todo-btn:hover {
+    background-color: var(--secondary-color);
+    color: var(--background);
+}
+
+.add-todo-btn:active {
+    opacity: 70%;
 }
 
 .modal, .list-modal {
@@ -166,6 +175,10 @@ p input, p select, p textarea {
 .confirmBtn:hover, .cancelBtn:hover, .list-confirm-btn:hover, .list-cancel-btn:hover {
     background-color: var(--accent-color);
     color: var(--background);
+}
+
+.confirmBtn:active, .cancelBtn:active, .list-confirm-btn:active, .list-cancel-btn:active {
+    opacity: 70%;
 }
 
 .item {
