@@ -34,6 +34,11 @@ export function displayList(todoList) {
     mainContent.append(listHeader, addTodoBtn, container);
 
     todoList.arrayOfTodos.forEach(displayTodo);
+
+    const currentSelected = document.querySelector(".list-selected");
+    if (currentSelected) currentSelected.classList.remove("list-selected");
+    const listLink = document.querySelector(`a[data-list-id="${todoList.id}"]`);
+    listLink.parentElement.classList.add("list-selected");
 }
 
 export function displayTodo(todo) {
@@ -169,8 +174,15 @@ export function createListLink(list) {
         displayList(list);
     });
 
+    return listLink;
+}
+
+export function displayListLink(a) {
     const links = document.querySelector(".links");
-    links.appendChild(listLink);
+    const listSelector = document.createElement("div");
+    listSelector.classList.add("list-selector");
+    listSelector.appendChild(a);
+    links.appendChild(listSelector);
 }
 
 function createDeleteIcon() {
@@ -274,7 +286,8 @@ listConfirmBtn.addEventListener("click", (event) => {
     const listNameInput = document.querySelector("#list-name");
     if (listNameInput.value !== "") {
         const list = new List(listNameInput.value);
-        createListLink(list);
+        const a = createListLink(list);
+        displayListLink(a);
         displayList(list);
         listForm.reset(); //reset form input fields
         toggleModal(listModal);
