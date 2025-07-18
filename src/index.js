@@ -10,7 +10,6 @@ export class List {
         this.arrayOfTodos = [];
         this.id = crypto.randomUUID();
         List.allLists.push(this);
-        // console.table(this);
     }
 
     static removeTodo(todo, list = allTodos) {
