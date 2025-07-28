@@ -12,14 +12,18 @@ export class List {
         List.allLists.push(this);
     }
 
-    static removeTodo(todo, list = allTodos) {
-        list.arrayOfTodos = list.arrayOfTodos.filter(item => item.id != todo.id); //remove from list
+    removeTodo(todo) {
+        this.arrayOfTodos = this.arrayOfTodos.filter(item => item.id != todo.id); //remove from list
         allTodos.arrayOfTodos = allTodos.arrayOfTodos.filter(item => item.id != todo.id); //remove from list of all todos
     }
 
     addTodo(todo) {
         this.arrayOfTodos.push(todo);
         if (this != allTodos) allTodos.arrayOfTodos.push(todo);
+    }
+
+    static removeList(list) {
+        List.allLists = List.allLists.filter(item => item.id != list.id);
     }
 }
 
@@ -50,7 +54,7 @@ export class Todo {
     // }
 }
 
-const allTodos = new List("All Todos");
+export const allTodos = new List("All Todos");
 createListSelector(allTodos);
 
 const firstList = new List("First List");
