@@ -40,9 +40,11 @@ body {
     background-color: var(--primary-color);
     width: 200px;
     max-width: 300px;
+    max-height: 100vh;
     padding: 10px 20px;
     display: flex;
     flex-direction: column;
+    gap: 10px;
 }
 
 .lists {
@@ -50,6 +52,7 @@ body {
     flex-direction: column;
     flex-grow: 1;
     gap: 5px;
+    overflow: scroll;
 }
 
 .list-selector {
@@ -64,11 +67,18 @@ body {
 }
 
 .add-list-btn {
+    padding: 10px 20px;
+    background-color: var(--background);
+    border: 2px solid var(--secondary-color);
+    border-radius: 50px; 
+    color: var(--text-color);
     cursor: pointer;
+    outline: none;
 }
 
 .main-content {
     min-height: 100vh;
+    max-height: 100vh;
     padding: 10px;
     background-color: var(--background);
     display: flex;
@@ -91,6 +101,7 @@ h1 {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    overflow: scroll;
 }
 
 .add-todo-btn {
@@ -194,7 +205,8 @@ p input, p select, p textarea {
 .list-confirm-btn:hover, 
 .list-cancel-btn:hover,
 .add-todo-btn:hover,
-.delete-list-btn:hover {
+.delete-list-btn:hover,
+.add-list-btn:hover {
     background-color: var(--accent-color);
     color: var(--background);
 }
