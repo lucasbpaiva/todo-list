@@ -37,8 +37,8 @@ export function displayList(todoList) {
 
     const currentSelected = document.querySelector(".list-selected");
     if (currentSelected) currentSelected.classList.remove("list-selected");
-    const listLink = document.querySelector(`a[data-list-id="${todoList.id}"]`);
-    listLink.parentElement.classList.add("list-selected");
+    const listSelector = document.querySelector(`div[data-list-id="${todoList.id}"]`);
+    listSelector.classList.add("list-selected");
 }
 
 export function displayTodo(todo) {
@@ -160,29 +160,22 @@ function createTodo() {
     return todo;
 }
 
-export function createListLink(list) {
-    const listLink = document.createElement("a");
-    listLink.href = "";
-    listLink.classList.add("list-link");
-    listLink.textContent = list.listName;
-    listLink.dataset.listId = list.id;
+export function createListSelector(list) {
+    const listName = document.createElement("p");
+    listName.textContent = list.listName;
 
-    listLink.addEventListener("click", (event) => {
-        event.preventDefault();
-        const listId = listLink.dataset.listId;
+    const lists = document.querySelector(".lists");
+    const listSelector = document.createElement("div");
+    listSelector.classList.add("list-selector");
+    listSelector.appendChild(listName);
+    listSelector.dataset.listId = list.id;
+    lists.appendChild(listSelector);
+
+    listSelector.addEventListener("click", () => {
+        const listId = listSelector.dataset.listId;
         const list = List.allLists.find(list => list.id == listId);
         displayList(list);
     });
-
-    return listLink;
-}
-
-export function displayListLink(a) {
-    const links = document.querySelector(".links");
-    const listSelector = document.createElement("div");
-    listSelector.classList.add("list-selector");
-    listSelector.appendChild(a);
-    links.appendChild(listSelector);
 }
 
 function createDeleteIcon() {
@@ -286,8 +279,7 @@ listConfirmBtn.addEventListener("click", (event) => {
     const listNameInput = document.querySelector("#list-name");
     if (listNameInput.value !== "") {
         const list = new List(listNameInput.value);
-        const a = createListLink(list);
-        displayListLink(a);
+        createListSelector(list);
         displayList(list);
         listForm.reset(); //reset form input fields
         toggleModal(listModal);
