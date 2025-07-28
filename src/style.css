@@ -45,7 +45,7 @@ body {
     flex-direction: column;
 }
 
-.links {
+.lists {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -55,11 +55,7 @@ body {
 .list-selector {
     padding: 5px 10px;
     border-radius: 10px;
-}
-
-.list-selector a {
-    text-decoration: none;
-    color: var(--text-color);
+    cursor: pointer;
 }
 
 .list-selector.list-selected {
