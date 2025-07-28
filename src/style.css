@@ -75,6 +75,7 @@ body {
     flex-direction: column;
     align-items: center;
     flex-grow: 1;
+    position: relative;
 }
 
 h1 {
@@ -104,9 +105,17 @@ h1 {
     outline: none;
 }
 
-.add-todo-btn:active {
-    background-color: var(--secondary-color);
-    color: var(--background);
+.delete-list-btn {
+    background-color: var(--background);
+    border: 2px solid var(--secondary-color);
+    position: fixed;
+    right: 10px;
+    top: 10px;
+    padding: 10px 20px;
+    border-radius: 50px;
+    color: var(--text-color);
+    cursor: pointer;
+    outline: none;
 }
 
 .modal, .list-modal {
@@ -180,7 +189,12 @@ p input, p select, p textarea {
     cursor: pointer;
 }
 
-.confirmBtn:hover, .cancelBtn:hover, .list-confirm-btn:hover, .list-cancel-btn:hover {
+.confirmBtn:hover, 
+.cancelBtn:hover, 
+.list-confirm-btn:hover, 
+.list-cancel-btn:hover,
+.add-todo-btn:hover,
+.delete-list-btn:hover {
     background-color: var(--accent-color);
     color: var(--background);
 }
