@@ -1,6 +1,6 @@
 import "./style.css";
 import { format } from "date-fns";
-import { displayList, createListLink, displayListLink} from "./interface";
+import { displayList, createListSelector} from "./interface";
 
 export class List {
     static allLists = [];
@@ -51,12 +51,10 @@ export class Todo {
 }
 
 const allTodos = new List("All Todos");
-const allTodosLink = createListLink(allTodos);
-displayListLink(allTodosLink);
+createListSelector(allTodos);
 
 const firstList = new List("First List");
-const firstListLink = createListLink(firstList);
-displayListLink(firstListLink);
+createListSelector(firstList);
 
 const firstListItems = [
     new Todo("Brush teeth", "something something", " 00:00:00", "High", firstList),
@@ -67,8 +65,7 @@ const firstListItems = [
 firstListItems.forEach(item => firstList.addTodo(item));
 
 const secondList = new List("My Other List");
-const secondListLink = createListLink(secondList);
-displayListLink(secondListLink);
+createListSelector(secondList);
 
 const secondListItems = [
     new Todo("Buy Manga", "Chainsaw Man and Spy X Family", " 00:00:00", "Low", secondList),
