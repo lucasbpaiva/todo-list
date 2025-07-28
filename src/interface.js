@@ -42,9 +42,9 @@ export function displayList(todoList) {
     listSelector.classList.add("list-selected");
 
 if (todoList.id !== allTodos.id) {
-    const deleteListPara = document.createElement("p");
+    const deleteListPara = document.createElement("button");
     deleteListPara.textContent = "Delete List";
-    deleteListPara.classList.add("delete-list");
+    deleteListPara.classList.add("delete-list-btn");
     mainContent.appendChild(deleteListPara);
 
     deleteListPara.addEventListener("click", () => {
