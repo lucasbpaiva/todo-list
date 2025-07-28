@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import { Todo, List} from "./index";
 import { Popover } from "bootstrap";
+import { allTodos } from "./index";
 
 //allow buttons in bootstrap popover
 Popover.Default.allowList.button = [];
@@ -39,6 +40,22 @@ export function displayList(todoList) {
     if (currentSelected) currentSelected.classList.remove("list-selected");
     const listSelector = document.querySelector(`div[data-list-id="${todoList.id}"]`);
     listSelector.classList.add("list-selected");
+
+if (todoList.id !== allTodos.id) {
+    const deleteListPara = document.createElement("p");
+    deleteListPara.textContent = "Delete List";
+    deleteListPara.classList.add("delete-list");
+    mainContent.appendChild(deleteListPara);
+
+    deleteListPara.addEventListener("click", () => {
+        for (const todo of todoList.arrayOfTodos) {
+            todoList.removeTodo(todo);
+        }
+        listSelector.remove();//remove list selector
+        List.removeList(todoList); //remove list
+        displayList(allTodos);
+    });
+}
 }
 
 export function displayTodo(todo) {
@@ -140,7 +157,7 @@ export function displayTodo(todo) {
 
     deleteBtn.addEventListener("click", () => {
         container.removeChild(item);
-        List.removeTodo(todo, todo.list);
+        todo.list.removeTodo(todo);
     });
 
     container.appendChild(item);
