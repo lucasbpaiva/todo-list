@@ -66,7 +66,7 @@ body {
     color: var(--background);
 }
 
-.add-list-btn {
+.button {
     padding: 10px 20px;
     background-color: var(--background);
     border: 2px solid var(--secondary-color);
@@ -74,6 +74,11 @@ body {
     color: var(--text-color);
     cursor: pointer;
     outline: none;
+}
+
+.button:hover {
+    background-color: var(--accent-color);
+    color: var(--background);
 }
 
 .main-content {
@@ -105,28 +110,14 @@ h1 {
 }
 
 .add-todo-btn {
-    padding: 10px 20px;
     width: min(400px, 100%);
     margin-bottom: 20px;
-    background-color: var(--background);
-    border: 2px solid var(--secondary-color);
-    border-radius: 50px; 
-    color: var(--text-color);
-    cursor: pointer;
-    outline: none;
 }
 
 .delete-list-btn {
-    background-color: var(--background);
-    border: 2px solid var(--secondary-color);
     position: fixed;
     right: 10px;
     top: 10px;
-    padding: 10px 20px;
-    border-radius: 50px;
-    color: var(--text-color);
-    cursor: pointer;
-    outline: none;
 }
 
 .modal, .list-modal {
@@ -186,29 +177,10 @@ p input, p select, p textarea {
 }
 
 /* div containing the buttons */
-.modal-buttons, .list-modal-buttons {
+.modal-btns-container, .list-modal-btns-container {
     display: flex;
     justify-content: space-evenly;
     margin-top: 10px;
-}
-
-.confirmBtn, .cancelBtn, .list-confirm-btn, .list-cancel-btn {
-    padding: 10px 20px;
-    border-radius: 15px;
-    border: 2px solid var(--accent-color);
-    background-color: var(--background);
-    cursor: pointer;
-}
-
-.confirmBtn:hover, 
-.cancelBtn:hover, 
-.list-confirm-btn:hover, 
-.list-cancel-btn:hover,
-.add-todo-btn:hover,
-.delete-list-btn:hover,
-.add-list-btn:hover {
-    background-color: var(--accent-color);
-    color: var(--background);
 }
 
 .item {
@@ -237,7 +209,8 @@ p input, p select, p textarea {
     white-space: pre;
 }
 
-.priority-btn {
+.priority-btn, 
+.delete-btn {
     padding: 3px;
     background: none;
     border: none;
@@ -300,16 +273,6 @@ p input, p select, p textarea {
 
 .set-pNone-btn {
     background-color: var(--secondary-color);
-}
-
-.delete-btn {
-    padding: 3px;
-    background: none;
-    border: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
 }
 
 .delete-btn svg {
