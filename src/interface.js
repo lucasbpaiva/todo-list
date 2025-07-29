@@ -21,7 +21,7 @@ export function displayList(todoList) {
 
     const addTodoBtn = document.createElement("button");
     addTodoBtn.textContent = "+ Add Todo";
-    addTodoBtn.classList.add("add-todo-btn");
+    addTodoBtn.classList.add("button", "add-todo-btn");
 
     addTodoBtn.addEventListener("click", () => {
         toggleModal(todoModal);
@@ -44,7 +44,7 @@ export function displayList(todoList) {
 if (todoList.id !== allTodos.id) {
     const deleteListPara = document.createElement("button");
     deleteListPara.textContent = "Delete List";
-    deleteListPara.classList.add("delete-list-btn");
+    deleteListPara.classList.add("button", "delete-list-btn");
     mainContent.appendChild(deleteListPara);
 
     deleteListPara.addEventListener("click", () => {
@@ -237,8 +237,8 @@ function createPriorityIcon() {
 const todoForm = document.querySelector(".todo-form");
 const todoModal = document.querySelector(".modal");
 const modalOverlay = document.querySelector(".modal-overlay");
-const confirmBtn = document.querySelector(".confirmBtn");
-const cancelBtn = document.querySelector(".cancelBtn");
+const confirmBtn = document.querySelector(".confirm-btn");
+const cancelBtn = document.querySelector(".cancel-btn");
 
 function toggleModal(modal) {
     modal.classList.toggle("closed");
