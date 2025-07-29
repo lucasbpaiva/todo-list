@@ -1,5 +1,4 @@
 import "./style.css";
-import { format } from "date-fns";
 import { displayList, createListSelector} from "./interface";
 
 export class List {
@@ -48,10 +47,6 @@ export class Todo {
     setPriority(priority) {
         this.priority = priority;
     }
-
-    // static removeTodo(todo) {
-    //     Todo.allTodos = Todo.allTodos.filter(item => item.id != todo.id);
-    // }
 }
 
 export const allTodos = new List("All Todos");
