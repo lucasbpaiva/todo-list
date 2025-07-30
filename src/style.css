@@ -66,6 +66,15 @@ body {
     color: var(--background);
 }
 
+/* prevent text selection on buttons */
+.list-selector,
+.button {
+    -webkit-user-select: none; /* For Safari */
+    -moz-user-select: none;    /* For Firefox */
+    -ms-user-select: none;     /* For Internet Explorer/Edge */
+    user-select: none;         /* Standard syntax */
+}
+
 .button {
     padding: 10px 20px;
     background-color: var(--background);
