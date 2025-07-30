@@ -44,6 +44,18 @@ export class Todo {
         this.completed = !this.completed;
     }
 
+    setTodoTitle(title) {
+        this.title = title;
+    }
+
+    setTodoNotes(notes) {
+        this.notes = notes;
+    }
+
+    setTodoDueDate(dueDate) {
+        this.dueDate = dueDate;
+    }
+
     setPriority(priority) {
         this.priority = priority;
     }
