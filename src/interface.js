@@ -1,7 +1,6 @@
 import { format } from "date-fns";
-import { Todo, List} from "./index";
 import { Popover } from "bootstrap";
-import { allTodos } from "./index";
+import { Todo, List, allTodos} from "./index";
 
 //allow buttons in bootstrap popover
 Popover.Default.allowList.button = [];
@@ -10,6 +9,22 @@ function clearDivContents(div) {
     while (div.firstChild) {
         div.removeChild(div.firstChild);
     }
+}
+
+function createDeleteListBtn(todoList, listSelector) {
+    const deleteListBtn = document.createElement("button");
+    deleteListBtn.textContent = "Delete List";
+    deleteListBtn.classList.add("button", "delete-list-btn");
+    document.querySelector(".main-content").appendChild(deleteListBtn);
+
+    deleteListBtn.addEventListener("click", () => {
+        for (const todo of todoList.arrayOfTodos) {
+            todoList.removeTodo(todo);
+        }
+        listSelector.remove();//remove list selector
+        List.removeList(todoList); //remove list
+        displayList(allTodos);
+    });
 }
 
 export function displayList(todoList) {
@@ -41,21 +56,9 @@ export function displayList(todoList) {
     const listSelector = document.querySelector(`div[data-list-id="${todoList.id}"]`);
     listSelector.classList.add("list-selected");
 
-if (todoList.id !== allTodos.id) {
-    const deleteListPara = document.createElement("button");
-    deleteListPara.textContent = "Delete List";
-    deleteListPara.classList.add("button", "delete-list-btn");
-    mainContent.appendChild(deleteListPara);
-
-    deleteListPara.addEventListener("click", () => {
-        for (const todo of todoList.arrayOfTodos) {
-            todoList.removeTodo(todo);
-        }
-        listSelector.remove();//remove list selector
-        List.removeList(todoList); //remove list
-        displayList(allTodos);
-    });
-}
+    if (todoList.id !== allTodos.id) {
+        createDeleteListBtn(todoList, listSelector);
+    }
 }
 
 export function displayTodo(todo) {
@@ -64,6 +67,17 @@ export function displayTodo(todo) {
     const item = document.createElement("div");
     item.classList.add("item");
 
+    const checkbox = createCheckbox(item, todo);
+    addTodoContent(item, todo);
+    if (todo.completed === true) checkbox.checked = true;
+
+    createPriorityBtn(item, todo);
+    createDeleteTodoBtn(item, todo);
+
+    container.appendChild(item);
+}
+
+function createCheckbox(item, todo) {
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.classList.add("custom-checkbox");
@@ -73,6 +87,10 @@ export function displayTodo(todo) {
         todo.toggleCompleted();
     });
 
+    return checkbox;
+}
+
+function addTodoContent(item, todo) {
     const todoText = document.createElement("div");
     todoText.classList.add("todo-text");
 
@@ -95,8 +113,9 @@ export function displayTodo(todo) {
     }
 
     item.appendChild(todoText);
-    if (todo.completed === true) checkbox.checked = true;
+}
 
+function createPriorityBtn(item, todo) {
     const priorityBtn = document.createElement("button");
     const priorityIcon = createPriorityIcon();
     priorityBtn.appendChild(priorityIcon);
@@ -104,6 +123,27 @@ export function displayTodo(todo) {
     priorityBtn.classList.add(`${todo.priority}`);
     item.appendChild(priorityBtn);
 
+    const popover = createPopover(item, priorityBtn);
+
+    //because the popover is dinamically created when the flag is clicked we need to set the event listener in the item div which was specified as the container in the popover creation 
+    item.addEventListener("click", function(event) {
+        if (event.target.matches(".set-p1-btn, .set-p2-btn, .set-p3-btn, .set-pNone-btn")) {
+            const priority = event.target.textContent;
+            todo.setPriority(priority);
+            priorityBtn.classList.remove("High", "Medium", "Low", "None");
+            priorityBtn.classList.add(priority);
+            popover.hide();
+        }
+    });
+
+    document.body.addEventListener("click", (event) => {
+        //Returns the first (starting at element) inclusive ancestor that matches selectors, and null otherwise.
+        const inPopover = event.target.closest(".popover");
+        if (!inPopover) popover.hide();
+    });
+}
+
+function createPopover(item, priorityBtn) {
     const popover = new Popover(priorityBtn, {
         container: item,
         content: '<div class="priority-popover"><button class="set-p1-btn set-priority-btn">High</button><button class="set-p2-btn set-priority-btn">Medium</button><button class="set-p3-btn set-priority-btn">Low</button><button class="set-pNone-btn set-priority-btn">None</button></div>', 
@@ -113,42 +153,10 @@ export function displayTodo(todo) {
         trigger: 'click'
     });
 
-    //because the popover is dinamically created when the flag is clicked we need to set the event listener in the item div which was specified as the container in the popover creation 
-    item.addEventListener("click", function(event) {
-        if (event.target.matches(".set-p1-btn")) {
-            todo.setPriority("High");
-            priorityBtn.classList.remove("Medium", "Low", "None");
-            priorityBtn.classList.add("High");
-            popover.hide();
-        }
-        if (event.target.matches(".set-p2-btn")) {
-            todo.setPriority("Medium");
-            priorityBtn.classList.remove("High", "Low", "None");
-            priorityBtn.classList.add("Medium");
-            popover.hide();
-        }
-        if (event.target.matches(".set-p3-btn")) {
-            todo.setPriority("Low");
-            priorityBtn.classList.remove("High", "Medium", "None");
-            priorityBtn.classList.add("Low");
-            popover.hide();
-        }
-        if (event.target.matches(".set-pNone-btn")) {
-            todo.setPriority("None");
-            priorityBtn.classList.remove("High", "Medium", "Low");
-            priorityBtn.classList.add("None");
-            popover.hide();
-        }
-    });
+    return popover;
+}
 
-    document.body.addEventListener("click", (event) => {
-        //Returns the first (starting at element) inclusive ancestor that matches selectors, and null otherwise.
-        const inPopover = event.target.closest(".popover");
-        if (!inPopover) {
-            popover.hide();
-        }
-    });
-
+function createDeleteTodoBtn(item, todo) {
     const deleteBtn = document.createElement("button");
     const deleteIcon = createDeleteIcon();
     deleteBtn.appendChild(deleteIcon);
@@ -156,11 +164,9 @@ export function displayTodo(todo) {
     item.appendChild(deleteBtn);
 
     deleteBtn.addEventListener("click", () => {
-        container.removeChild(item);
+        document.querySelector(".container").removeChild(item);
         todo.list.removeTodo(todo);
     });
-
-    container.appendChild(item);
 }
 
 function createTodo() {
