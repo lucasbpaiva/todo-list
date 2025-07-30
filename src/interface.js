@@ -69,7 +69,7 @@ export function displayTodo(todo) {
 
     const checkbox = createCheckbox(item, todo);
     addTodoContent(item, todo);
-    if (todo.completed === true) checkbox.checked = true;
+    checkbox.checked = todo.completed;
 
     createPriorityBtn(item, todo);
     createDeleteTodoBtn(item, todo);
