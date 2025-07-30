@@ -11,22 +11,6 @@ function clearDivContents(div) {
     }
 }
 
-function createDeleteListBtn(todoList, listSelector) {
-    const deleteListBtn = document.createElement("button");
-    deleteListBtn.textContent = "Delete List";
-    deleteListBtn.classList.add("button", "delete-list-btn");
-    document.querySelector(".main-content").appendChild(deleteListBtn);
-
-    deleteListBtn.addEventListener("click", () => {
-        for (const todo of todoList.arrayOfTodos) {
-            todoList.removeTodo(todo);
-        }
-        listSelector.remove();//remove list selector
-        List.removeList(todoList); //remove list
-        displayList(allTodos);
-    });
-}
-
 export function displayList(todoList) {
     const mainContent = document.querySelector(".main-content");
     clearDivContents(mainContent);
@@ -39,6 +23,7 @@ export function displayList(todoList) {
     addTodoBtn.classList.add("button", "add-todo-btn");
 
     addTodoBtn.addEventListener("click", () => {
+        todoForm.dataset.mode = "creation";
         toggleModal(todoModal);
         document.querySelector("#todo-title").focus();
     });
@@ -61,6 +46,22 @@ export function displayList(todoList) {
     }
 }
 
+function createDeleteListBtn(todoList, listSelector) {
+    const deleteListBtn = document.createElement("button");
+    deleteListBtn.textContent = "Delete List";
+    deleteListBtn.classList.add("button", "delete-list-btn");
+    document.querySelector(".main-content").appendChild(deleteListBtn);
+
+    deleteListBtn.addEventListener("click", () => {
+        for (const todo of todoList.arrayOfTodos) {
+            todoList.removeTodo(todo);
+        }
+        listSelector.remove();//remove list selector
+        List.removeList(todoList); //remove list
+        displayList(allTodos);
+    });
+}
+
 export function displayTodo(todo) {
     const container = document.querySelector(".container");
 
@@ -72,6 +73,7 @@ export function displayTodo(todo) {
     checkbox.checked = todo.completed;
 
     createPriorityBtn(item, todo);
+    createEditBtn(item, todo);
     createDeleteTodoBtn(item, todo);
 
     container.appendChild(item);
@@ -115,6 +117,68 @@ function addTodoContent(item, todo) {
     item.appendChild(todoText);
 }
 
+function createEditIcon() {
+    const svgNS = "http://www.w3.org/2000/svg";
+    const editIcon = document.createElementNS(svgNS, "svg");
+    editIcon.setAttribute("height", "24px");
+    editIcon.setAttribute("width", "24px");
+    editIcon.setAttribute("viewBox", "0 -960 960 960");
+    editIcon.setAttribute("fill", "var(--secondary-color)");
+    const editPath = document.createElementNS(svgNS, "path");
+    editPath.setAttribute("d", "M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z");
+    editIcon.appendChild(editPath);
+
+    return editIcon;
+}
+
+function createEditBtn(item, todo) {
+    const editBtn = document.createElement("button");
+    const editIcon = createEditIcon();
+    editBtn.appendChild(editIcon);
+    editBtn.classList.add("edit-btn");
+    item.appendChild(editBtn);
+
+    editBtn.addEventListener("click", () => {
+        document.querySelector("#todo-title").value = todo.title;
+        document.querySelector("#todo-notes").value = todo.notes;
+        if (todo.dueDate !== " 00:00:00") {
+            const formattedDate = format(todo.dueDate, "yyyy-MM-dd");
+            document.querySelector("#due-date").value = formattedDate;
+        }
+        document.querySelector("#priority").value = todo.priority;
+
+        todoForm.dataset.mode = "edition";
+        todoForm.dataset.todoId = todo.id;
+        toggleModal(todoModal);
+        document.querySelector("#todo-title").focus();
+    });
+}
+
+function createPriorityIcon() {
+    const svgNS = "http://www.w3.org/2000/svg";
+    const priorityIcon = document.createElementNS(svgNS, "svg");
+    priorityIcon.setAttribute("height", "24px");
+    priorityIcon.setAttribute("width", "24px");
+    priorityIcon.setAttribute("viewBox", "-25.6 -25.6 307.20 307.20");
+    priorityIcon.setAttribute("fill", "var(--secondary-color)");
+    priorityIcon.setAttribute("transform", "rotate(0)");
+
+    const strokeWidth = document.createElementNS(svgNS, "g");
+    strokeWidth.setAttribute("stroke-width", "0");
+    priorityIcon.appendChild(strokeWidth);
+
+    const tracer = document.createElementNS(svgNS, "g");
+    tracer.setAttribute("stroke-linecap", "round");
+    tracer.setAttribute("stroke-linejoin", "round");
+    priorityIcon.appendChild(tracer);
+
+    const priorityPath = document.createElementNS(svgNS, "path");
+    priorityPath.setAttribute("d", "M223.99951,48.00452v120a8.00094,8.00094,0,0,1-3.20019,6.40039c-15.14161,11.35547-29.62012,15.42773-43.42871,15.42773-18.74707.001-36.25879-7.50488-52.52247-14.47461-26.7124-11.449-49.92529-21.38183-76.84863-3.21924v43.86573a8,8,0,0,1-16,0v-168c0-.05616.00733-.11036.0083-.16651.00342-.14624.01123-.292.022-.43774.00976-.126.0205-.251.03564-.37525.01562-.12622.03613-.25122.05762-.37646.02343-.13794.04834-.27539.07861-.41065.02539-.11206.05566-.22241.08594-.33325.03808-.14038.07666-.28.12207-.417.03662-.1106.07861-.21948.12012-.32861.04931-.12915.09863-.2583.15429-.38428.05225-.1189.11133-.23511.16944-.35181.05517-.1101.10986-.22021.16992-.32715.07031-.126.14746-.248.22461-.37036.05957-.0935.11767-.18725.18115-.27807.085-.123.17676-.24219.26953-.36084.06738-.08618.13428-.17237.20508-.25586.09326-.10987.19189-.21582.292-.32129.0835-.08814.16748-.17529.25488-.25952.09375-.09058.1919-.178.291-.26465.106-.09253.21289-.18237.32373-.26929.0459-.03613.08691-.07641.13428-.11181,35.69629-26.77247,67.707-13.05762,95.95117-.95313,27.7666,11.90039,51.749,22.17871,80.04883.95313a8.00012,8.00012,0,0,1,12.7998,6.40039Z");
+    priorityIcon.appendChild(priorityPath);
+
+    return priorityIcon;
+}
+
 function createPriorityBtn(item, todo) {
     const priorityBtn = document.createElement("button");
     const priorityIcon = createPriorityIcon();
@@ -156,6 +220,20 @@ function createPopover(item, priorityBtn) {
     return popover;
 }
 
+function createDeleteIcon() {
+    const svgNS = "http://www.w3.org/2000/svg";
+    const deleteIcon = document.createElementNS(svgNS, "svg");
+    deleteIcon.setAttribute("height", "24px");
+    deleteIcon.setAttribute("width", "24px");
+    deleteIcon.setAttribute("viewBox", "0 -960 960 960");
+    deleteIcon.setAttribute("fill", "var(--secondary-color)");
+    const deletePath = document.createElementNS(svgNS, "path");
+    deletePath.setAttribute("d", "M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z");
+    deleteIcon.appendChild(deletePath);
+
+    return deleteIcon;
+}
+
 function createDeleteTodoBtn(item, todo) {
     const deleteBtn = document.createElement("button");
     const deleteIcon = createDeleteIcon();
@@ -183,6 +261,17 @@ function createTodo() {
     return todo;
 }
 
+function editTodo(todo) {
+    todo.setTodoTitle(document.querySelector("#todo-title").value);
+    todo.setTodoNotes(document.querySelector("#todo-notes").value);
+    todo.setTodoDueDate(`${document.querySelector("#due-date").value} 00:00:00`);
+    todo.setPriority(document.querySelector("#priority").value);
+
+    const listId = document.querySelector(".container").dataset.listId;
+    const list = List.allLists.find(list => list.id === listId);
+    displayList(list);
+}
+
 export function createListSelector(list) {
     const listName = document.createElement("p");
     listName.textContent = list.listName;
@@ -201,45 +290,6 @@ export function createListSelector(list) {
     });
 }
 
-function createDeleteIcon() {
-    const svgNS = "http://www.w3.org/2000/svg"
-    const deleteIcon = document.createElementNS(svgNS, "svg");
-    deleteIcon.setAttribute("height", "24px");
-    deleteIcon.setAttribute("width", "24px");
-    deleteIcon.setAttribute("viewBox", "0 -960 960 960");
-    deleteIcon.setAttribute("fill", "var(--secondary-color)");
-    const deletePath = document.createElementNS(svgNS, "path");
-    deletePath.setAttribute("d", "M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z");
-    deleteIcon.appendChild(deletePath);
-
-    return deleteIcon;
-}
-
-function createPriorityIcon() {
-    const svgNS = "http://www.w3.org/2000/svg"
-    const priorityIcon = document.createElementNS(svgNS, "svg");
-    priorityIcon.setAttribute("height", "24px");
-    priorityIcon.setAttribute("width", "24px");
-    priorityIcon.setAttribute("viewBox", "-25.6 -25.6 307.20 307.20");
-    priorityIcon.setAttribute("fill", "var(--secondary-color)");
-    priorityIcon.setAttribute("transform", "rotate(0)");
-
-    const strokeWidth = document.createElementNS(svgNS, "g");
-    strokeWidth.setAttribute("stroke-width", "0");
-    priorityIcon.appendChild(strokeWidth);
-
-    const tracer = document.createElementNS(svgNS, "g");
-    tracer.setAttribute("stroke-linecap", "round");
-    tracer.setAttribute("stroke-linejoin", "round");
-    priorityIcon.appendChild(tracer);
-
-    const priorityPath = document.createElementNS(svgNS, "path");
-    priorityPath.setAttribute("d", "M223.99951,48.00452v120a8.00094,8.00094,0,0,1-3.20019,6.40039c-15.14161,11.35547-29.62012,15.42773-43.42871,15.42773-18.74707.001-36.25879-7.50488-52.52247-14.47461-26.7124-11.449-49.92529-21.38183-76.84863-3.21924v43.86573a8,8,0,0,1-16,0v-168c0-.05616.00733-.11036.0083-.16651.00342-.14624.01123-.292.022-.43774.00976-.126.0205-.251.03564-.37525.01562-.12622.03613-.25122.05762-.37646.02343-.13794.04834-.27539.07861-.41065.02539-.11206.05566-.22241.08594-.33325.03808-.14038.07666-.28.12207-.417.03662-.1106.07861-.21948.12012-.32861.04931-.12915.09863-.2583.15429-.38428.05225-.1189.11133-.23511.16944-.35181.05517-.1101.10986-.22021.16992-.32715.07031-.126.14746-.248.22461-.37036.05957-.0935.11767-.18725.18115-.27807.085-.123.17676-.24219.26953-.36084.06738-.08618.13428-.17237.20508-.25586.09326-.10987.19189-.21582.292-.32129.0835-.08814.16748-.17529.25488-.25952.09375-.09058.1919-.178.291-.26465.106-.09253.21289-.18237.32373-.26929.0459-.03613.08691-.07641.13428-.11181,35.69629-26.77247,67.707-13.05762,95.95117-.95313,27.7666,11.90039,51.749,22.17871,80.04883.95313a8.00012,8.00012,0,0,1,12.7998,6.40039Z");
-    priorityIcon.appendChild(priorityPath);
-
-    return priorityIcon;
-}
-
 const todoForm = document.querySelector(".todo-form");
 const todoModal = document.querySelector(".modal");
 const modalOverlay = document.querySelector(".modal-overlay");
@@ -255,8 +305,13 @@ confirmBtn.addEventListener("click", (event) => {
     event.preventDefault(); //  Prevent the "confirm" button from the default behavior of submitting the form
     const todoTitleInput = document.querySelector("#todo-title");
     if (todoTitleInput.value !== "") {
-        const todo = createTodo();
-        displayTodo(todo);
+        if (todoForm.dataset.mode === "creation") {
+            const todo = createTodo();
+            displayTodo(todo);
+        } else {
+            const todo = Todo.allTodos.find(todo => todo.id === todoForm.dataset.todoId);
+            editTodo(todo);
+        }
         todoForm.reset(); //reset form input fields
         toggleModal(todoModal);
     } else {
