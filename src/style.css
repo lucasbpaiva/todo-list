@@ -324,7 +324,7 @@ p input, p select, p textarea {
     transition: all 200ms cubic-bezier(0.25, 0.25, 0.56, 2);
 }
 
-input[type="checkbox"]:checked ~ div {
+input[type="checkbox"]:checked + div {
     text-decoration: line-through;
     color: var(--secondary-color);
 }
