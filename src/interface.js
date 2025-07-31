@@ -11,6 +11,10 @@ function clearDivContents(div) {
     }
 }
 
+function findListById(listId) {
+    return List.allLists.find(list => list.id === listId);
+}
+
 export function displayList(todoList) {
     const mainContent = document.querySelector(".main-content");
     clearDivContents(mainContent);
@@ -55,9 +59,11 @@ function createDeleteListBtn(todoList, listSelector) {
     deleteListBtn.addEventListener("click", () => {
         for (const todo of todoList.arrayOfTodos) {
             todoList.removeTodo(todo);
+            localStorage.removeItem(todo.id);
         }
         listSelector.remove();//remove list selector
         List.removeList(todoList); //remove list
+        localStorage.removeItem(todoList.id); //remove from local storage
         displayList(allTodos);
     });
 }
@@ -194,6 +200,7 @@ function createPriorityBtn(item, todo) {
         if (event.target.matches(".set-p1-btn, .set-p2-btn, .set-p3-btn, .set-pNone-btn")) {
             const priority = event.target.textContent;
             todo.setPriority(priority);
+            addTodoToStorage(todo); //register new priority in storage
             priorityBtn.classList.remove("High", "Medium", "Low", "None");
             priorityBtn.classList.add(priority);
             popover.hide();
@@ -242,9 +249,25 @@ function createDeleteTodoBtn(item, todo) {
     item.appendChild(deleteBtn);
 
     deleteBtn.addEventListener("click", () => {
-        document.querySelector(".container").removeChild(item);
-        todo.list.removeTodo(todo);
+        document.querySelector(".container").removeChild(item); //remove from UI
+        const list = findListById(todo.listId);
+        list.removeTodo(todo); //remove object from list
+        localStorage.removeItem(todo.id); //remove from local storage
     });
+}
+
+function addTodoToStorage(todo) {
+    const todoData = {
+        title: todo.title,
+        notes: todo.notes,
+        dueDate: todo.dueDate,
+        priority: todo.priority,
+        completed: todo.completed,
+        listId: todo.listId,
+        id: todo.id,
+    };
+
+    localStorage.setItem(todo.id, JSON.stringify(todoData));
 }
 
 function createTodo() {
@@ -254,9 +277,10 @@ function createTodo() {
     const dueDate = `${document.querySelector("#due-date").value} 00:00:00`;
     const priority = document.querySelector("#priority").value;
     const listId = document.querySelector(".container").dataset.listId;
-    const list = List.allLists.find(list => list.id == listId);
-    const todo = new Todo(title, notes, dueDate, priority, list); //create todo object
+    const todo = new Todo(title, notes, dueDate, priority, listId); //create todo object
+    const list = findListById(listId);
     list.addTodo(todo); //add todo to the list object
+    addTodoToStorage(todo);
 
     return todo;
 }
@@ -268,8 +292,19 @@ function editTodo(todo) {
     todo.setPriority(document.querySelector("#priority").value);
 
     const listId = document.querySelector(".container").dataset.listId;
-    const list = List.allLists.find(list => list.id === listId);
+    const list = findListById(listId);
     displayList(list);
+
+    addTodoToStorage(todo);
+}
+
+function addListToStorage(list) {
+    const listData = {
+        name: list.listName,
+        id: list.id
+    };
+
+    localStorage.setItem(list.id, JSON.stringify(listData));
 }
 
 export function createListSelector(list) {
@@ -285,7 +320,7 @@ export function createListSelector(list) {
 
     listSelector.addEventListener("click", () => {
         const listId = listSelector.dataset.listId;
-        const list = List.allLists.find(list => list.id == listId);
+        const list = findListById(listId);
         displayList(list);
     });
 }
@@ -357,6 +392,7 @@ listConfirmBtn.addEventListener("click", (event) => {
     const listNameInput = document.querySelector("#list-name");
     if (listNameInput.value !== "") {
         const list = new List(listNameInput.value);
+        addListToStorage(list);
         createListSelector(list);
         displayList(list);
         listForm.reset(); //reset form input fields
