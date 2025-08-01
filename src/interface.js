@@ -21,22 +21,26 @@ export function displayList(todoList) {
 
     const listHeader = document.createElement("h1");
     listHeader.textContent = todoList.listName;
+    mainContent.appendChild(listHeader);
 
-    const addTodoBtn = document.createElement("button");
-    addTodoBtn.textContent = "+ Add Todo";
-    addTodoBtn.classList.add("button", "add-todo-btn");
+    if (todoList.id !== allTodos.id) {
+        const addTodoBtn = document.createElement("button");
+        addTodoBtn.textContent = "+ Add Todo";
+        addTodoBtn.classList.add("button", "add-todo-btn");
+        mainContent.appendChild(addTodoBtn);
 
-    addTodoBtn.addEventListener("click", () => {
-        todoForm.dataset.mode = "creation";
-        toggleModal(todoModal);
-        document.querySelector("#todo-title").focus();
-    });
+        addTodoBtn.addEventListener("click", () => {
+            todoForm.dataset.mode = "creation";
+            toggleModal(todoModal);
+            document.querySelector("#todo-title").focus();
+        });
+    }
 
     const container = document.createElement("div");
     container.classList.add("container");
     container.dataset.listId = todoList.id;
 
-    mainContent.append(listHeader, addTodoBtn, container);
+    mainContent.appendChild(container);
 
     todoList.arrayOfTodos.forEach(displayTodo);
 
@@ -64,6 +68,10 @@ function createDeleteListBtn(todoList, listSelector) {
         listSelector.remove();//remove list selector
         List.removeList(todoList); //remove list
         localStorage.removeItem(todoList.id); //remove from local storage
+        const allListIds = JSON
+        .parse(localStorage.getItem("allListIds"))
+        .filter(todoListId => todoListId !== todoList.id);
+        localStorage.setItem("allListIds", JSON.stringify(allListIds));
         displayList(allTodos);
     });
 }
@@ -307,6 +315,9 @@ function addListToStorage(list) {
     };
 
     localStorage.setItem(list.id, JSON.stringify(listData));
+    const allListIds = JSON.parse(localStorage.getItem("allListIds"));
+    if(!allListIds.includes(list.id)) allListIds.push(list.id);
+    localStorage.setItem("allListIds", JSON.stringify(allListIds));
 }
 
 export function createListSelector(list) {
@@ -329,12 +340,12 @@ export function createListSelector(list) {
 
 export function displayListsFromStorage() {
     if (localStorage.length > 0) { //Local storage contains data
-        Object.keys(localStorage).forEach((key) => {
-            const value = JSON.parse(localStorage.getItem(key));
-            if (value.listName) { //value represents a list
-                const list = new List(value.listName, value.id);
+        for (const listId of JSON.parse(localStorage.getItem("allListIds"))) {
+            const listData = JSON.parse(localStorage.getItem(listId));
+            if (listData) {
+                const list = new List(listData.listName, listData.id);
                 createListSelector(list);
-                for (const id of value.arrayOfTodoIds) {
+                for (const id of listData.arrayOfTodoIds) {
                     const todoData = JSON.parse(localStorage.getItem(id));
                     if (todoData) { //confirm todoData is in local storage
                         const todo = new Todo(todoData.title, todoData.notes, todoData.dueDate, todoData.priority, todoData.listId, todoData.id);
@@ -343,7 +354,7 @@ export function displayListsFromStorage() {
                     }
                 }
             }
-        });     
+        } 
     }
 }
 
