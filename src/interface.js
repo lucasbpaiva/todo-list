@@ -281,6 +281,7 @@ function createTodo() {
     const list = findListById(listId);
     list.addTodo(todo); //add todo to the list object
     addTodoToStorage(todo);
+    addListToStorage(list);
 
     return todo;
 }
@@ -301,7 +302,8 @@ function editTodo(todo) {
 function addListToStorage(list) {
     const listData = {
         listName: list.listName,
-        id: list.id
+        id: list.id,
+        arrayOfTodoIds: list.arrayOfTodos.map(todo => todo.id)
     };
 
     localStorage.setItem(list.id, JSON.stringify(listData));
@@ -332,19 +334,16 @@ export function displayListsFromStorage() {
             if (value.listName) { //value represents a list
                 const list = new List(value.listName, value.id);
                 createListSelector(list);
+                for (const id of value.arrayOfTodoIds) {
+                    const todoData = JSON.parse(localStorage.getItem(id));
+                    if (todoData) { //confirm todoData is in local storage
+                        const todo = new Todo(todoData.title, todoData.notes, todoData.dueDate, todoData.priority, todoData.listId, todoData.id);
+                        const list = findListById(todoData.listId);
+                        list.addTodo(todo);
+                    }
+                }
             }
-        });
-
-        Object.keys(localStorage).forEach((key) => { //loop over a second time to get the todos and make sure all the lists are loaded
-            const value = JSON.parse(localStorage.getItem(key));
-            if (value.title) {
-                const todo = new Todo(value.title, value.notes, value.dueDate, value.priority, value.listId, value.id);
-                const list = findListById(value.listId);
-                list.addTodo(todo); //add todo to the list object
-            }
-        });
-
-                
+        });     
     }
 }
 
