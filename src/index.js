@@ -1,13 +1,13 @@
 import "./style.css";
-import { displayList, createListSelector} from "./interface";
+import { displayList, createListSelector, displayListsFromStorage} from "./interface";
 
 export class List {
     static allLists = [];
 
-    constructor(listName) {
+    constructor(listName, listId) {
         this.listName = listName;
         this.arrayOfTodos = [];
-        this.id = crypto.randomUUID();
+        this.id = listId !== undefined ? listId : crypto.randomUUID();
         List.allLists.push(this);
     }
 
@@ -29,14 +29,14 @@ export class List {
 export class Todo {
     static allTodos = [];
 
-    constructor(title, notes, dueDate, priority, listId = allTodos.id) {
+    constructor(title, notes, dueDate, priority, listId = allTodos.id, todoId) {
         this.title = title;
         this.notes = notes;
         this.dueDate = dueDate;
         this.priority = priority;
         this.completed = false;
         this.listId = listId;
-        this.id = crypto.randomUUID();
+        this.id = todoId !== undefined ? todoId : crypto.randomUUID();
         Todo.allTodos.push(this);
     }
 
@@ -87,3 +87,5 @@ const secondListItems = [
 secondListItems.forEach(item => secondList.addTodo(item));
 
 displayList(allTodos);
+
+displayListsFromStorage()

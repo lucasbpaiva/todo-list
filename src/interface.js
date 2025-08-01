@@ -300,7 +300,7 @@ function editTodo(todo) {
 
 function addListToStorage(list) {
     const listData = {
-        name: list.listName,
+        listName: list.listName,
         id: list.id
     };
 
@@ -323,6 +323,29 @@ export function createListSelector(list) {
         const list = findListById(listId);
         displayList(list);
     });
+}
+
+export function displayListsFromStorage() {
+    if (localStorage.length > 0) { //Local storage contains data
+        Object.keys(localStorage).forEach((key) => {
+            const value = JSON.parse(localStorage.getItem(key));
+            if (value.listName) { //value represents a list
+                const list = new List(value.listName, value.id);
+                createListSelector(list);
+            }
+        });
+
+        Object.keys(localStorage).forEach((key) => { //loop over a second time to get the todos and make sure all the lists are loaded
+            const value = JSON.parse(localStorage.getItem(key));
+            if (value.title) {
+                const todo = new Todo(value.title, value.notes, value.dueDate, value.priority, value.listId, value.id);
+                const list = findListById(value.listId);
+                list.addTodo(todo); //add todo to the list object
+            }
+        });
+
+                
+    }
 }
 
 const todoForm = document.querySelector(".todo-form");
