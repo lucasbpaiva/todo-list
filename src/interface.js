@@ -101,6 +101,7 @@ function createCheckbox(item, todo) {
 
     checkbox.addEventListener("change", () => {
         todo.toggleCompleted();
+        addTodoToStorage(todo);
     });
 
     return checkbox;
@@ -349,6 +350,7 @@ export function displayListsFromStorage() {
                     const todoData = JSON.parse(localStorage.getItem(id));
                     if (todoData) { //confirm todoData is in local storage
                         const todo = new Todo(todoData.title, todoData.notes, todoData.dueDate, todoData.priority, todoData.listId, todoData.id);
+                        if (todoData.completed) todo.toggleCompleted();
                         const list = findListById(todoData.listId);
                         list.addTodo(todo);
                     }
