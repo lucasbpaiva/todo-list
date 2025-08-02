@@ -64,30 +64,20 @@ export class Todo {
 export const allTodos = new List("All Todos");
 createListSelector(allTodos);
 
-// const firstList = new List("First List");
-// createListSelector(firstList);
-
-// const firstListItems = [
-//     new Todo("Brush teeth", "something something", " 00:00:00", "High", firstList.id),
-//     new Todo("Study for the test", "something something", new Date("2025-08-05 00:00:00"), "Medium", firstList.id),
-//     new Todo("Organize surprise party", "", new Date("2025-08-20 00:00:00"), "Low", firstList.id)
-// ];
-
-// firstListItems.forEach(item => firstList.addTodo(item));
-
-// const secondList = new List("My Other List");
-// createListSelector(secondList);
-
-// const secondListItems = [
-//     new Todo("Buy Manga", "Chainsaw Man and Spy X Family", " 00:00:00", "Low", secondList.id),
-//     new Todo("Go to the gym", "get some more reps", new Date("2025-07-17 00:00:00"), "Medium", secondList.id),
-//     new Todo("Actually read the mangas", "someday", " 00:00:00", "High", secondList.id)
-// ];
-
-// secondListItems.forEach(item => secondList.addTodo(item));
 
 if (!localStorage.getItem("allListIds")) {
     localStorage.setItem("allListIds", JSON.stringify(List.allLists.map(list => list.id)));
+
+    const firstList = new List("First List");
+    createListSelector(firstList);
+
+    const item1 = new Todo("Brush teeth", "Don't forget to floss!", " 00:00:00", "High", firstList.id);
+    const item2 = new Todo("Study for the tests", "Calculus and Linear Algebra", new Date("2025-08-15 00:00:00"), "Medium", firstList.id);
+    const item3 = new Todo("Walk the dog", "", " 00:00:00", "High", firstList.id);
+
+    const items = [item1, item2, item3];
+
+    items.forEach(item => firstList.addTodo(item));
 }
 displayListsFromStorage();
 displayList(allTodos);
