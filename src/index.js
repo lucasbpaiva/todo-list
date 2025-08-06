@@ -68,7 +68,7 @@ createListSelector(allTodos);
 if (!localStorage.getItem("allListIds")) {
     localStorage.setItem("allListIds", JSON.stringify(List.allLists.map(list => list.id)));
 
-    const firstList = new List("First List");
+    const firstList = new List("Things to do");
     createListSelector(firstList);
 
     const item1 = new Todo("Brush teeth", "Don't forget to floss!", " 00:00:00", "High", firstList.id);
