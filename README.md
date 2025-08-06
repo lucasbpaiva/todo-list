@@ -1,6 +1,6 @@
 # todo-list
 
-This project is a classic todo app. You can see the project live at https://lucasbpaiva.github.io/
+This project is a classic todo app. You can see the project live at [https://lucasbpaiva.github.io/](https://lucasbpaiva.github.io/todo-list/)
 
 ![todo-list-demo](./images/todo-list-demo.png)
 
